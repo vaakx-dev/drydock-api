@@ -1,19 +1,5 @@
 import type { disposable } from "./core.js";
 
-export type clipboard_api = {
-  read_text(): Promise<string>;
-  write_text(contents: string): Promise<void>;
-};
-
-export type notification_request = {
-  title: string;
-  body?: string;
-};
-
-export type notification_api = {
-  show(request: notification_request): Promise<void>;
-};
-
 export type window_state = {
   is_maximized: boolean;
 };

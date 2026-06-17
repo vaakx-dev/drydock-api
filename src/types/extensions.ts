@@ -69,15 +69,6 @@ export type UiContext = {
   subscriptions: DisposableScope;
 };
 
-export type ui_module = {
-  activate?(context: UiContext):
-    | void
-    | disposable
-    | dispose_function
-    | Promise<void | disposable | dispose_function>;
-  deactivate?(): void | Promise<void>;
-};
-
 export type ExportRegistry = {
   provide<T>(service_id: string, service: T): disposable;
 };
