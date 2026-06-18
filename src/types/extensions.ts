@@ -82,42 +82,10 @@ export type UiContext = runtime_ui_api & {
   subscriptions: DisposableScope;
 };
 
-export type command_registration = {
-  id: string;
-  title: string;
-  description?: string;
-  category?: string;
-};
-
-export type command_list_item = command_registration & {
-  source_extension_id: string;
-};
-
-export type command_run_result = {
-  command_id: string;
-};
-
-export type command_changed_event = {
-  reason: "registered" | "unregistered" | "cleared";
-  command_id?: string;
-};
-
-export type command_capabilities = {
-  run(input: { command_id: string }): void | Promise<void>;
-};
-
-export type command_api = {
-  register(command: command_registration, capabilities: command_capabilities): disposable;
-  unregister(input: { command_id: string }): void;
-  list(): command_list_item[];
-  run(input: { command_id: string }): Promise<command_run_result>;
-  on_changed(handler: (event: command_changed_event) => void): disposable;
-};
-
-export type service_method = (...args: json_value[]) => json_value | Promise<json_value>;
+export type service_method = (...args: never[]) => unknown;
 
 export type ServiceRegistry = {
-  provide<T extends Record<string, service_method>>(service_id: string, service: T): disposable;
+  provide<T extends { [K in keyof T]: service_method }>(service_id: string, service: T): disposable;
 };
 
 export type UiBridge = {
@@ -138,16 +106,8 @@ export type HostContext<Imports extends Record<string, unknown> = Record<string,
   opener: HostOpenerApi;
   app: HostAppApi;
   tasks: host_task_api;
-  commands: command_api;
   services: ServiceRegistry;
   imports: Imports;
   ui: UiBridge;
   subscriptions: DisposableScope;
 };
-
-export type CommandRegistration = command_registration;
-export type CommandListItem = command_list_item;
-export type CommandRunResult = command_run_result;
-export type CommandChangedEvent = command_changed_event;
-export type CommandCapabilities = command_capabilities;
-export type CommandApi = command_api;

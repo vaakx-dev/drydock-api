@@ -1,7 +1,6 @@
 import type {
   HostContext,
   UiContext,
-  CommandApi,
   disposable,
   json_value,
   registered_task,
@@ -86,7 +85,6 @@ void view;
 void task;
 
 const host_tasks: host_task_api = host_context.tasks;
-const commands: CommandApi = host_context.commands;
 const host_task = host_context.tasks.start({ id: "index", title: "Index workspace" });
 const host_task_id: string = host_task.id;
 const host_task_global_id: string = host_task.global_id;
@@ -99,29 +97,8 @@ void host_task_global_id;
 void host_task_dispose_result;
 void host_task;
 
-const command_registration: disposable = commands.register(
-  {
-    id: "example.run",
-    title: "Run example",
-    category: "Example",
-  },
-  {
-    run: async (input) => {
-      const command_id: string = input.command_id;
-      void command_id;
-    },
-  },
-);
-const command_list = commands.list();
-const command_run = commands.run({ command_id: "example.run" });
-const command_subscription = commands.on_changed((event) => {
-  const reason: "registered" | "unregistered" | "cleared" = event.reason;
-  void reason;
-});
-void command_registration;
-void command_list;
-void command_run;
-void command_subscription;
+// @ts-expect-error commands are extension-owned services, not a host context API.
+host_context.commands;
 
 type ImportedServices = {
   notes: {

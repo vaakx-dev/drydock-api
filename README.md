@@ -23,7 +23,7 @@ This package defines the extension contract. Drydock provides the runtime object
 The package exports only the active contract types for:
 
 - `core` (`json_value`, `protocol_error`, `disposable`, `dispose_function`)
-- `extensions` (`extension` manifest data, `load_extensions_response`, `UiContext`, `HostContext`, `UiHostClient`, `UiBridge`, command, service, import, and subscription types)
+- `extensions` (`extension` manifest data, `load_extensions_response`, `UiContext`, `HostContext`, `UiHostClient`, `UiBridge`, service, import, and subscription types)
 - `runtime` (`runtime_ui_api`, `host_task_api`, view, task, workspace state, and settings API types)
 - `workspace` (`workspace_info`, `create_workspace_input`)
 - `dialog` (`HostDialogApi`, dialog option types)
@@ -40,6 +40,6 @@ Runtime UI APIs are available on `UiContext`:
 
 Host extensions can report work through `HostContext.tasks.start(...)`. The shell runtime owns display and observation of reported tasks.
 
-Host extensions can contribute commands through `HostContext.commands`. Commands are a core Drydock capability, not an extension package dependency.
-
 Extension services are declared in `drydock.services` and consumed through generated `HostContext<Imports>` types. Consumers should use manifest aliases on `context.imports` instead of importing provider packages.
+
+Commands are extension-owned behavior. The public API package does not expose a built-in host command API; command services should be modeled through `drydock.services` and `drydock.imports`.
