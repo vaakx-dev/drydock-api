@@ -25,4 +25,7 @@ The package exports only the active contract types for:
 - `core` (`json_value`, `protocol_error`, `disposable`, `dispose_function`)
 - `extensions` (`extension` manifest data, `load_extensions_response`, `UiContext`, `HostContext`, `UiHostClient`, `UiBridge`, `ExportRegistry`, `ExtensionServiceClient`, `DisposableScope`)
 - `workspace` (`workspace_info`, `create_workspace_input`)
+- `dialog` (`HostDialogApi`, dialog option types)
+- `opener` (`HostOpenerApi`)
+- `app` (`HostAppApi`)
 - `native_helpers` (`window_state`, `window_api`)

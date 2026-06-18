@@ -1,6 +1,9 @@
 import type { disposable, dispose_function, json_value } from "./core.js";
 import type { window_api } from "./native_helpers.js";
 import type { create_workspace_input, workspace_info } from "./workspace.js";
+import type { HostAppApi } from "./app.js";
+import type { HostDialogApi } from "./dialog.js";
+import type { HostOpenerApi } from "./opener.js";
 
 export type extension_package_ui = {
   entry: string;
@@ -91,6 +94,9 @@ export type HostWorkspaceApi = {
 export type HostContext = {
   extension_id: string;
   workspace: HostWorkspaceApi;
+  dialog: HostDialogApi;
+  opener: HostOpenerApi;
+  app: HostAppApi;
   exports: ExportRegistry;
   extensions: ExtensionServiceClient;
   ui: UiBridge;
