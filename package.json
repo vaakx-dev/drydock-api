@@ -13,7 +13,8 @@
     "src"
   ],
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "typecheck:contract": "tsc --noEmit -p tsconfig.contract.json"
   },
   "devDependencies": {
     "typescript": "^5.6.3"

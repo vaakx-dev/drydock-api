@@ -4,6 +4,7 @@ import type { create_workspace_input, workspace_info } from "./workspace.js";
 import type { HostAppApi } from "./app.js";
 import type { HostDialogApi } from "./dialog.js";
 import type { HostOpenerApi } from "./opener.js";
+import type { host_task_api, runtime_ui_api } from "./runtime.js";
 
 export type extension_package_ui = {
   entry: string;
@@ -65,7 +66,7 @@ export type DisposableScope = {
   dispose(): Promise<void>;
 };
 
-export type UiContext = {
+export type UiContext = runtime_ui_api & {
   extension_id: string;
   host: UiHostClient;
   window: window_api;
@@ -97,6 +98,7 @@ export type HostContext = {
   dialog: HostDialogApi;
   opener: HostOpenerApi;
   app: HostAppApi;
+  tasks: host_task_api;
   exports: ExportRegistry;
   extensions: ExtensionServiceClient;
   ui: UiBridge;
