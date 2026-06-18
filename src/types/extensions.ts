@@ -11,22 +11,31 @@ export type extension_package_ui = {
   styles?: string[];
 };
 
-export type extension_package_export = {
-  type: string;
+export type extension_service_runtime = "host";
+
+export type extension_package_service = {
+  contract: string;
+  version: string;
+  runtime: extension_service_runtime;
+};
+
+export type extension_package_import = {
+  from: string;
+  version: string;
+  required?: boolean;
 };
 
 export type extension_package_manifest = {
   name: string;
   version: string;
   type: "module";
-  exports?: Record<string, { types: string }>;
   drydock: {
     id: string;
     api: string;
     host?: string;
     ui?: extension_package_ui;
-    exports?: Record<string, extension_package_export>;
-    imports?: Record<string, string[]>;
+    services?: Record<string, extension_package_service>;
+    imports?: Record<string, extension_package_import>;
   };
 };
 
@@ -73,12 +82,42 @@ export type UiContext = runtime_ui_api & {
   subscriptions: DisposableScope;
 };
 
-export type ExportRegistry = {
-  provide<T>(service_id: string, service: T): disposable;
+export type command_registration = {
+  id: string;
+  title: string;
+  description?: string;
+  category?: string;
 };
 
-export type ExtensionServiceClient = {
-  use<T>(extension_id: string, service_id: string): Promise<T>;
+export type command_list_item = command_registration & {
+  source_extension_id: string;
+};
+
+export type command_run_result = {
+  command_id: string;
+};
+
+export type command_changed_event = {
+  reason: "registered" | "unregistered" | "cleared";
+  command_id?: string;
+};
+
+export type command_capabilities = {
+  run(input: { command_id: string }): void | Promise<void>;
+};
+
+export type command_api = {
+  register(command: command_registration, capabilities: command_capabilities): disposable;
+  unregister(input: { command_id: string }): void;
+  list(): command_list_item[];
+  run(input: { command_id: string }): Promise<command_run_result>;
+  on_changed(handler: (event: command_changed_event) => void): disposable;
+};
+
+export type service_method = (...args: json_value[]) => json_value | Promise<json_value>;
+
+export type ServiceRegistry = {
+  provide<T extends Record<string, service_method>>(service_id: string, service: T): disposable;
 };
 
 export type UiBridge = {
@@ -92,15 +131,23 @@ export type HostWorkspaceApi = {
   create(input: create_workspace_input): Promise<workspace_info>;
 };
 
-export type HostContext = {
+export type HostContext<Imports extends Record<string, unknown> = Record<string, unknown>> = {
   extension_id: string;
   workspace: HostWorkspaceApi;
   dialog: HostDialogApi;
   opener: HostOpenerApi;
   app: HostAppApi;
   tasks: host_task_api;
-  exports: ExportRegistry;
-  extensions: ExtensionServiceClient;
+  commands: command_api;
+  services: ServiceRegistry;
+  imports: Imports;
   ui: UiBridge;
   subscriptions: DisposableScope;
 };
+
+export type CommandRegistration = command_registration;
+export type CommandListItem = command_list_item;
+export type CommandRunResult = command_run_result;
+export type CommandChangedEvent = command_changed_event;
+export type CommandCapabilities = command_capabilities;
+export type CommandApi = command_api;
